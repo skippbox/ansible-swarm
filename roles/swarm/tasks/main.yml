@@ -1,0 +1,5 @@
+---
+  - include: create_secgroup.yml
+  - include: create_secgroup_rules.yml
+  - include: create_vm.yml
+  - include: create_inv.yml

@@ -1,0 +1,26 @@
+# internal
+  - name: flannel etcd 2379
+    local_action:
+     module: cs_securitygroup_rule
+     security_group: "{{ swarm_security_group_name }}"
+     start_port: 2379
+     end_port: 2379
+     user_security_group: "{{ swarm_security_group_name }}"
+
+  - name: flannel UDP 8472
+    local_action:
+     module: cs_securitygroup_rule
+     security_group: "{{ swarm_security_group_name }}"
+     start_port: 8472
+     end_port: 8472
+     protocol: udp
+     user_security_group: "{{ swarm_security_group_name }}"
+
+# external access
+
+  - name: SSH for swarm
+    local_action:
+     module: cs_securitygroup_rule
+     security_group: "{{ swarm_security_group_name }}"
+     start_port: 22
+     end_port: 22

@@ -1,0 +1,24 @@
+  - name: Start swarm head node
+    local_action:
+      module: cs_instance
+      name: "{{ swarm_node_prefix }}-head"
+      template: "{{ swarm_template }}"
+      service_offering: "{{ swarm_instance_type }}"
+      ssh_key: "{{ ssh_key }}"
+      security_groups: [ '{{ swarm_security_group_name }}' ]
+      user_data: "{{ lookup('template', '../templates/swarm-master.j2') }}"
+    register: swarm_master
+    
+  - debug: msg='swarm master IP is {{ swarm_master.default_ip }}'
+              
+  - name: Start swarm nodes
+    local_action:
+      module: cs_instance
+      name: "{{ swarm_node_prefix }}-node-{{ item }}"
+      template: "{{ swarm_template }}"
+      service_offering: "{{ swarm_instance_type }}"
+      ssh_key: "{{ ssh_key }}"
+      security_groups: [ '{{ swarm_security_group_name }}' ]
+      user_data: "{{ lookup('template', '../templates/swarm-node.j2') }}"
+    with_sequence: count={{ swarm_num_nodes }}
+    register: swarm_nodes

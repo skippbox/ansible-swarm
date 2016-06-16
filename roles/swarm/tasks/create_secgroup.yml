@@ -1,0 +1,7 @@
+# Create swarm security group
+
+  - name: Create swarm Security Group
+    local_action:
+     module: cs_securitygroup
+     name: "{{ swarm_security_group_name }}" 
+     description: swarm 
