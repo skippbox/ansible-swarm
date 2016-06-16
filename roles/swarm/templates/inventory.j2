@@ -4,6 +4,9 @@
 [head]
 {{ swarm_master.default_ip }}
 
+[consul]
+{{ swarm_consul.default_ip }}
+
 [nodes]
 {% for item in swarm_nodes.results %}
 {{ item.default_ip }}

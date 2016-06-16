@@ -3,8 +3,24 @@
     local_action:
      module: cs_securitygroup_rule
      security_group: "{{ swarm_security_group_name }}"
-     start_port: 2379
-     end_port: 2379
+     start_port: 2377
+     end_port: 2377
+     user_security_group: "{{ swarm_security_group_name }}"
+
+  - name: libnetwork advertize 2376
+    local_action:
+     module: cs_securitygroup_rule
+     security_group: "{{ swarm_security_group_name }}"
+     start_port: 2376
+     end_port: 2376
+     user_security_group: "{{ swarm_security_group_name }}"
+
+  - name: consul 8500
+    local_action:
+     module: cs_securitygroup_rule
+     security_group: "{{ swarm_security_group_name }}"
+     start_port: 8500
+     end_port: 8500
      user_security_group: "{{ swarm_security_group_name }}"
 
   - name: flannel UDP 8472

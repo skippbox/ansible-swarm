@@ -1,3 +1,16 @@
+  - name: Start swarm consul node
+    local_action:
+      module: cs_instance
+      name: "{{ swarm_node_prefix }}-consul"
+      template: "{{ swarm_template }}"
+      service_offering: "{{ swarm_instance_type }}"
+      ssh_key: "{{ ssh_key }}"
+      security_groups: [ '{{ swarm_security_group_name }}' ]
+      user_data: "{{ lookup('template', '../templates/swarm-master.j2') }}"
+    register: swarm_consul
+
+  - debug: msg='swarm consul IP is {{ swarm_consul.default_ip }}'
+
   - name: Start swarm head node
     local_action:
       module: cs_instance
