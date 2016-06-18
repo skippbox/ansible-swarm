@@ -31,7 +31,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 
 ## Install Docker 1.12 on all your nodes 
 
-This play downloads the tarball of 1.12 and replaces the existing Docker.
+This play downloads the tarball of 1.12 and replaces the existing Docker it is a bit hackish (to say the least).
 
 ```
 $ ansible-playbook bootstrap.yml
@@ -40,7 +40,15 @@ $ ansible-playbook bootstrap.yml
 After a short time, you should get back on your feet with Docker 1.12 on all your nodes
 
 ```
-$ ansible all -m shell -a "sudo docker version"
+$ ansible all -b -m shell -a "docker version" | grep Version
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
+ Version:      1.12.0-rc2
 ```
 
 ## Create your Swarm
