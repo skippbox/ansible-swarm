@@ -1,0 +1,29 @@
+---
+- hosts: all
+  tasks:
+  - name: Download Docker 1.12
+    get_url: url=https://test.docker.com/builds/Linux/x86_64/docker-1.12.0-rc2.tgz
+             dest=/root/docker.tgz
+  - name: Stop old Docker
+    service: name=docker state=stopped
+  - name: untar Docker 1.12
+    unarchive: src=/root/docker.tgz dest=/root copy=no
+  - name: Remove tarball
+    file: name=/root/docker.tgz state=absent
+  - name: Put new binaries in place
+    shell: mv docker/* /usr/bin
+  - name: Restart Docker service
+    service: name=docker state=restarted
+
+- hosts: head
+  tasks:
+  - name: Init Swarm
+    command: docker swarm init
+
+#- hosts: nodes
+#  tasks:
+#  - name: Swarm Join
+#    shell: docker swarm join '{{ hostvars['head'] }}':2377
+#    tags: join
+
+

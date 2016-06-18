@@ -2,10 +2,7 @@
 # localhost ansible_python_interpreter=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/python
 
 [head]
-{{ swarm_master.default_ip }}
-
-[consul]
-{{ swarm_consul.default_ip }}
+head ansible_host={{ swarm_master.default_ip }}
 
 [nodes]
 {% for item in swarm_nodes.results %}
