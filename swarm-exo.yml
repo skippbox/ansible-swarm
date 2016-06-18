@@ -11,5 +11,5 @@
     swarm_instance_type: Tiny
 
   roles:
-    - common
-    - swarm
+    - common-exo
+    - swarm-exo

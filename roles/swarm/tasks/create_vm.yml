@@ -1,37 +1,37 @@
-  - name: Start swarm consul node
-    local_action:
-      module: cs_instance
-      name: "{{ swarm_node_prefix }}-consul"
-      template: "{{ swarm_template }}"
-      service_offering: "{{ swarm_instance_type }}"
-      ssh_key: "{{ ssh_key }}"
-      security_groups: [ '{{ swarm_security_group_name }}' ]
-      user_data: "{{ lookup('template', '../templates/swarm-master.j2') }}"
-    register: swarm_consul
+  - name: Start Swarm head node
+    ec2:
+      region: "{{ aws_region }}"
+      image: "{{ swarm_template }}"
+      instance_type: "{{ swarm_instance_type }}"
+      key_name: "{{ ssh_key }}"
+      group: "{{ swarm_security_group_name }}"
+      user_data: "{{ lookup('template', '../templates/swarm-head.j2') }}"
+      wait: yes
+    register: swarm_head
+ 
+  - debug: msg='Swarm head IP is {{ item.public_ip }}'
+    with_items: swarm_head.instances
 
-  - debug: msg='swarm consul IP is {{ swarm_consul.default_ip }}'
+  - name: Add new instance to host group
+    add_host: hostname={{ item.public_ip }} groupname=swarm
+    with_items: swarm_head.instances
 
-  - name: Start swarm head node
-    local_action:
-      module: cs_instance
-      name: "{{ swarm_node_prefix }}-head"
-      template: "{{ swarm_template }}"
-      service_offering: "{{ swarm_instance_type }}"
-      ssh_key: "{{ ssh_key }}"
-      security_groups: [ '{{ swarm_security_group_name }}' ]
-      user_data: "{{ lookup('template', '../templates/swarm-master.j2') }}"
-    register: swarm_master
-    
-  - debug: msg='swarm master IP is {{ swarm_master.default_ip }}'
-              
-  - name: Start swarm nodes
-    local_action:
-      module: cs_instance
-      name: "{{ swarm_node_prefix }}-node-{{ item }}"
-      template: "{{ swarm_template }}"
-      service_offering: "{{ swarm_instance_type }}"
-      ssh_key: "{{ ssh_key }}"
-      security_groups: [ '{{ swarm_security_group_name }}' ]
+  - name: Start Swarm nodes
+    ec2:
+      region: "{{ aws_region }}"
+      image: "{{ swarm_template }}"
+      instance_type: "{{ swarm_instance_type }}"
+      key_name: "{{ ssh_key }}"
+      group: "{{ swarm_security_group_name }}"
       user_data: "{{ lookup('template', '../templates/swarm-node.j2') }}"
-    with_sequence: count={{ swarm_num_nodes }}
-    register: swarm_nodes
+      count: "{{ swarm_num_nodes }}"
+      wait: yes
+    register: ec2
+
+  - name: Add new instance to host group
+    add_host: hostname={{ item.public_ip }} groupname=swarm
+    with_items: ec2.instances
+
+  - name: Add new instance to host group
+    add_host: hostname={{ item.public_ip }} groupname=swarm_nodes
+    with_items: ec2.instances

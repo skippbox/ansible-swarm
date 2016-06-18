@@ -1,7 +1,29 @@
-# Create swarm security group
+# Create swarm security group and rules
 
-  - name: Create swarm Security Group
-    local_action:
-     module: cs_securitygroup
-     name: "{{ swarm_security_group_name }}" 
-     description: swarm 
+  - name: Create Swarm Security Group
+    ec2_group:
+      name: "{{ swarm_security_group_name }}" 
+      description: k8s 
+      region: "{{ aws_region }}"
+      rules:
+        - proto: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+        - proto: tcp
+          from_port: 2377
+          to_port: 2377
+          group_name: "{{ swarm_security_group_name }}"
+        - proto: udp
+          from_port: 8472
+          to_port: 8472
+          group_name: "{{ swarm_security_group_name }}"
+      rules_egress:
+        - proto: udp
+          from_port: 8472
+          to_port: 8472
+          group_name: "{{ swarm_security_group_name }}"
+        - proto: tcp
+          from_port: 0
+          to_port: 65535
+          cidr_ip: 0.0.0.0/0

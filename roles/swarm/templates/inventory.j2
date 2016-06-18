@@ -1,20 +1,23 @@
 [default]
-# localhost ansible_python_interpreter=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/python
 
 [head]
-head ansible_host={{ swarm_master.default_ip }}
+{% for item in swarm_head.instances %}
+head ansible_host={{ item.public_ip }}
+{% endfor %}
 
 [nodes]
-{% for item in swarm_nodes.results %}
-{{ item.default_ip }}
+{% for item in ec2.instances %}
+{{ item.public_ip }}
 {% endfor %}
 
 [all]
-{{ swarm_master.default_ip }}
-{% for item in swarm_nodes.results %}
-{{ item.default_ip }}
+{% for item in swarm_head.instances %}
+{{ item.public_ip }}
+{% endfor %}
+{% for item in ec2.instances %}
+{{ item.public_ip }}
 {% endfor %}
 
 [all:vars]
-ansible_ssh_user=root
+ansible_ssh_user=ubuntu
 ansible_ssh_private_key_file=~/.ssh/id_rsa_{{ ssh_key }}

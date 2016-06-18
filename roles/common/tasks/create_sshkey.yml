@@ -1,18 +1,19 @@
-  - name: Create SSH Key
-    local_action:
-      module: cs_sshkeypair
+  - name: Create EC2 SSH Key
+    ec2_key:
       name: "{{ ssh_key }}"
-    register: key
+      region: "{{ aws_region }}"
+      state: present
+    register: ec2key
     tags: sshkey
 
-  - debug: msg='private key is {{ key.private_key }}'
-    when: key.changed
+  - debug: msg='private key is {{ ec2key.key.private_key }}'
+    when: ec2key.changed
     tags: sshkey
  
-  - local_action: copy content="{{ key.private_key }}" dest="~/.ssh/id_rsa_{{ ssh_key }}"
-    when: key.changed
+  - local_action: copy content="{{ ec2key.key.private_key }}" dest="~/.ssh/id_rsa_{{ ssh_key }}"
+    when: ec2key.changed
     tags: sshkey
 
   - file: path="~/.ssh/id_rsa_{{ ssh_key }}" mode=0600
-    when: key.changed
+    when: ec2key.changed
     tags: sshkey
