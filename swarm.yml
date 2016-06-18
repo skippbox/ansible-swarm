@@ -5,7 +5,7 @@
     ssh_key: swarm
     swarm_num_nodes: 2
     swarm_security_group_name: swarm
-    swarm_node_prefix: tutu
+    swarm_node_prefix: fufu
 # This template name is specific to http://exoscale.ch, replace it
     swarm_template: Linux Ubuntu 15.10 64-bit 10G Disk (2016-03-29-19e783) 
     swarm_instance_type: Tiny
@@ -13,7 +13,3 @@
   roles:
     - common
     - swarm
-
-- hosts: consul
-  roles:
-    - consul
