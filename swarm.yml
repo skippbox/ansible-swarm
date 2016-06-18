@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+  vars:
+    ssh_key: swarm
+    aws_region: eu-west-1
+    swarm_num_nodes: 2
+    swarm_security_group_name: swarm
+    swarm_template: ami-054bc176 
+    swarm_instance_type: m3.large
+
+  roles:
+    - common
+    - swarm
