@@ -1,5 +1,10 @@
 # Swarm Cluster on AWS with Docker 1.12
 
+Docker 1.12 contains some significant changes to how Swarm cluster are created, managed and used.
+Quickly put, Swarm is now embedded in the Docker engine and provides some advanced networking features like load-balancing and virtual IPs for services.
+
+This playbook is meant as a quick way to test Docker 1.12 RC2 for #dockercon. 
+
 The main playbook creates a cluster of Ubuntu 15.10 machines on AWS.
 Then you can bootstrap those machines to create a Swarm cluster with the new Docker 1.12
 
@@ -63,7 +68,7 @@ $ ansible head -b -m shell -a "docker swarm init"
 Join the nodes in your Swarm cluster, note that we only run this on the _nodes_ defined in the inventory.
 
 ```
-$ ansible nodes -b -m shell -a "docker swarm join <IP_HEAD>:2377"
+$ ansible nodes -b -m shell -a "docker swarm join <PRIVATE_IP_HEAD>:2377"
 ```
 
 Test it

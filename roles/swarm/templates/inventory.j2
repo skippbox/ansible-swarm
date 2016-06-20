@@ -5,6 +5,11 @@
 head ansible_host={{ item.public_ip }}
 {% endfor %}
 
+[head_private]
+{% for item in swarm_head.instances %}
+head_private ansible_host={{ item.private_ip }}
+{% endfor %}
+
 [nodes]
 {% for item in ec2.instances %}
 {{ item.public_ip }}

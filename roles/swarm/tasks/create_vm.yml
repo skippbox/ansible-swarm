@@ -12,6 +12,9 @@
   - debug: msg='Swarm head IP is {{ item.public_ip }}'
     with_items: swarm_head.instances
 
+  - debug: msg='Swarm head IP is {{ item.private_ip }}'
+    with_items: swarm_head.instances
+
   - name: Add new instance to host group
     add_host: hostname={{ item.public_ip }} groupname=swarm
     with_items: swarm_head.instances

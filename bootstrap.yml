@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: swarm
   remote_user: root
   become: yes
   become_method: sudo
@@ -19,14 +19,21 @@
     service: name=docker state=restarted
 
 #- hosts: head
+#  remote_user: root
+#  become: yes
+#  become_method: sudo
 #  tasks:
 #  - name: Init Swarm
-#    command: docker swarm init
+#    shell: docker swarm init
+#    tags: init
 
 #- hosts: nodes
+#  remote_user: root
+#  become: yes
+#  become_method: sudo
 #  tasks:
 #  - name: Swarm Join
-#    shell: docker swarm join '{{ hostvars['head'] }}':2377
+#    shell: docker swarm join '{{ hostvars['head_private'] }}':2377
 #    tags: join
 
 
