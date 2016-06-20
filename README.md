@@ -15,7 +15,7 @@ $ ansible-playbook swarm.yml
 Check the inventory file and after a bit of time, you should have Docker running everywhere:
 
 ```
-$ ansible all -m shell -a "sudo docker ps"
+$ ansible swarm -m shell -a "sudo docker ps"
 52.208.57.134 | SUCCESS | rc=0 >>
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
 
@@ -32,6 +32,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 ## Install Docker 1.12 on all your nodes 
 
 This play downloads the tarball of 1.12 and replaces the existing Docker it is a bit hackish (to say the least).
+Note that 1.12 is still in RC state.
 
 ```
 $ ansible-playbook bootstrap.yml
@@ -40,7 +41,7 @@ $ ansible-playbook bootstrap.yml
 After a short time, you should get back on your feet with Docker 1.12 on all your nodes
 
 ```
-$ ansible all -b -m shell -a "docker version" | grep Version
+$ ansible swarm -b -m shell -a "docker version | grep Version"
  Version:      1.12.0-rc2
  Version:      1.12.0-rc2
  Version:      1.12.0-rc2
@@ -56,19 +57,19 @@ $ ansible all -b -m shell -a "docker version" | grep Version
 Initialize your Swarm head
 
 ```
-$ ansible head -m shell -a "sudo docker swarm init"
+$ ansible head -b -m shell -a "docker swarm init"
 ```
 
 Join the nodes in your Swarm cluster, note that we only run this on the _nodes_ defined in the inventory.
 
 ```
-$ ansible nodes -m shell -a "docker swarm join <IP_HEAD>:2377"
+$ ansible nodes -b -m shell -a "docker swarm join <IP_HEAD>:2377"
 ```
 
 Test it
 
 ```
-$ ansible all -m shell -a "docker node list"
+$ ansible head -m shell -a "docker node list"
 ```
 
 ## Now use it

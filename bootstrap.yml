@@ -18,10 +18,10 @@
   - name: Restart Docker service
     service: name=docker state=restarted
 
-- hosts: head
-  tasks:
-  - name: Init Swarm
-    command: docker swarm init
+#- hosts: head
+#  tasks:
+#  - name: Init Swarm
+#    command: docker swarm init
 
 #- hosts: nodes
 #  tasks:
